@@ -1,0 +1,10 @@
+{:instance_id=>"i-02bcdf5f",
+ :private_dns_name=>"ec2-54-193-72-186.us-west-1.compute.amazonaws.com",
+ :public_dns_name=>"ec2-54-193-72-186.us-west-1.compute.amazonaws.com",
+ :private_ip_address=>"172.31.9.255",
+ :public_ip_address=>"54.193.72.186",
+ :architecture=>:x86_64,
+ :availability_zone=>"us-west-1b",
+ :launch_time=>2013-12-25 00:42:31 UTC,
+ :image_id=>"ami-f46457b1",
+ :key_name=>"Judson/1f1r_rsa"}
