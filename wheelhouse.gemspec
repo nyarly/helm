@@ -17,7 +17,25 @@ Gem::Specification.new do |spec|
   # Do this: y$@"
   # !!find lib bin doc spec spec_help -not -regex '.*\.sw.' -type f 2>/dev/null
   spec.files		= %w[
+    lib/wheelhouse/records/server.rb
+    lib/wheelhouse/single-command.rb
+    lib/wheelhouse/persister.rb
+    lib/wheelhouse/queries/server.rb
+    lib/wheelhouse/command-config.rb
+    lib/wheelhouse/command-definition.rb
+    lib/wheelhouse/record.rb
+    lib/wheelhouse/cli.rb
+    lib/wheelhouse/persisters/server.rb
+    lib/wheelhouse/command-runner.rb
+    lib/wheelhouse/server-command.rb
+    lib/wheelhouse/query.rb
+    lib/wheelhouse/application.rb
+    lib/wheelhouse.rb
+    bin/wheelhouse
+    spec_help/gem_test_suite.rb
   ]
+
+  spec.executables << 'wheelhouse'
 
   spec.test_file        = "spec_help/gem_test_suite.rb"
   spec.licenses = ["MIT"]
@@ -34,6 +52,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rake', "~> 10.1.1"
   spec.add_dependency 'sqlite3', "~> 1.3.5"
   spec.add_dependency 'sequel', "~> 4.6.0"
+  spec.add_dependency 'caliph', "~> 0.3.1"
+  spec.add_dependency 'valise', "~> 1.1.1"
 
   #spec.post_install_message = "Thanks for installing my gem!"
 end

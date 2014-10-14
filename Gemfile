@@ -5,3 +5,5 @@ group :development do
   gem 'foobar'
   gem 'corundum'
 end
+
+gemspec :name => 'wheelhouse'

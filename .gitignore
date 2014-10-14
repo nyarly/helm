@@ -1,3 +1,4 @@
 *.sw?
 1f1r-servers.yaml
 servers.sql
+corundum/
