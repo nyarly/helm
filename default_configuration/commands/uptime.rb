@@ -13,9 +13,13 @@ module Wheelhouse
     end
 
     def format_result(execution)
-      puts "#{execution.server.name} (#{execution.server.public_ip_address})"
-      puts execution.result.stdout
-      puts
+      if execution.result.exit_code == 0
+        puts "#{execution.server.name} (#{execution.server.public_ip_address})"
+        puts execution.result.stdout
+        puts
+      else
+        super
+      end
     end
   end
 end
