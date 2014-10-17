@@ -3,13 +3,12 @@ require 'helm/queries/server'
 
 module Helm
   module Commands
-    CONNSTRING = "sqlite://servers.sql"
-
     class Command
-      def initialize(options)
+      def initialize(app_config, options)
+        @app_config = app_config
         @options = options
       end
-      attr_accessor :options
+      attr_accessor :app_config, :options
 
       def if_option(name)
         if options.has_key?(name.to_s)
@@ -20,16 +19,16 @@ module Helm
 
     module Main
       class Defined < Command
-        def initialize(config, options)
+        def initialize(app_config, options, config)
           @config = config
-          super(options)
+          super(app_config, options)
         end
         attr_reader :config
 
         def execute
           config.query_options = options || {}
 
-          query = Helm::Queries::Server.new(CONNSTRING)
+          query = Helm::Queries::Server.new(app_config.connstring)
           if_option(:client){|client| query.client = client }
           if_option(:role){|role| query.role = role }
           if_option(:name){|name| query.name = name }
@@ -43,10 +42,9 @@ module Helm
 
     module Database
       class Migrate < Command
-        def initialize(options)
-          @db_string  = CONNSTRING
+        def initialize(app_config, options)
           @directory = "migrations"
-          super(options)
+          super
         end
         attr_accessor :db_string, :directory
 
@@ -54,7 +52,7 @@ module Helm
           require 'sequel/extensions/migration'
 
           Helm.log_at(Logger::DEBUG) do
-            Sequel::Migrator.run(databases[db_string], directory)
+            Sequel::Migrator.run(Helm.databases[app_config.connstring], directory)
           end
         end
       end
@@ -62,9 +60,9 @@ module Helm
 
     module Servers
       class Add < Command
-        def initialize(source_io,options)
+        def initialize(app_config, options, source_io)
           @source_io = source_io
-          super(options)
+          super(app_config, options)
         end
 
         def execute
@@ -72,7 +70,7 @@ module Helm
           require 'helm/persisters/server'
           serverlist = Array(YAML.load(source_io.read))
 
-          store = Helm::Persisters::Server.new(CONNSTRING)
+          store = Helm::Persisters::Server.new(app_config.connstring)
 
           defaults = {:client => options[:client]}
 
@@ -85,54 +83,78 @@ module Helm
       class List < Command
         def execute
           require 'helm/queries/server'
-          Helm::Queries::Server.new(CONNSTRING).print
+          Helm::Queries::Server.new(app_config.connstring).print
         end
       end
 
       class Edit < Command
-        def execute
-          require 'yaml'
-          require 'helm/persisters/server'
+        def edit_tempfile(file)
           require 'io/console'
 
-          query = Helm::Queries::Server.new(CONNSTRING)
+          edit_shell = Caliph::Shell.new
+          edit_shell.output_stream = File.new("/dev/null", "a")
+          edit_shell.run(ENV['EDITOR'] || app_config.editor, file.path) do |cmd|
+            cmd.redirect_stdin(IO.console.path)
+            cmd.redirect_stdout(IO.console.path)
+          end
+        ensure
+          edit_shell.output_stream.close
+        end
 
-          if_option(:id){|server_id|
-            query.server_id = server_id }
+        def server_query
+          query = Helm::Queries::Server.new(app_config.connstring)
+
+          if_option(:id){|server_id| query.server_id = server_id }
           if_option(:client){|client| query.client = client }
           if_option(:role){|role| query.role = role }
           if_option(:name){|name| query.name = name }
           if_option(:platform){|platform| query.platform = platform }
+
+          query
+        end
+
+        def put_server_record_in_file(query, file)
+          server = query.first
+          server_hash = server.to_hash
+
+          server_id = server_hash.delete(:server_id)
+
+          file.write("# Edit this file to update the server\n")
+          file.write(server_hash.to_yaml)
+          file.close
+
+          return server_id
+        end
+
+        def save_server_record_to_database(server_id, file)
+          file.open
+          new_hash = YAML.load(file.read).merge(:server_id => server_id)
+
+          store = Helm::Persisters::Server.new(app_config.connstring)
+          store.insert_or_update(new_hash)
+        end
+
+        def execute
+          require 'yaml'
+          require 'helm/persisters/server'
+
+          query = server_query
 
           unless query.to_a.length == 1
             puts "#{query.to_a.length} servers match #{query.constraint.inspect}"
             exit 1
           end
 
-          server = query.first
-
-          server_hash = server.to_hash
-          server_id = server_hash.delete(:server_id)
-
           begin
-            file = Tempfile.new('server', '.')
-            file.write("# Edit this file to update the server\n")
-            file.write(server_hash.to_yaml)
-            file.close
-            edit_shell = Caliph::Shell.new
-            edit_shell.output_stream = File.new("/dev/null", "a")
-            edit_shell.run(ENV['EDITOR'] || 'vim', file.path) do |cmd|
-              cmd.redirect_stdin(IO.console.path)
-              cmd.redirect_stdout(IO.console.path)
-            end
-            file.open
-            new_hash = YAML.load(file.read).merge(:server_id => server_id)
-            store = Helm::Persisters::Server.new(CONNSTRING)
+            file = Tempfile.new('server', app_config.tempdir)
 
-            store.insert_or_update(new_hash)
+            server_id = put_server_record_in_file(query, file)
+
+            edit_tempfile(file)
+
+            save_server_record_to_database(server_id, file)
           ensure
-            edit_shell.output_stream.close
-            file.unlink
+            file.unlink if file
           end
         end
       end
