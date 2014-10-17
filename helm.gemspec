@@ -1,17 +1,21 @@
 Gem::Specification.new do |spec|
   spec.name		= "helm"
-  spec.version		= "0.0.1"
+  spec.version		= "0.0.2"
   author_list = {
     "Judson Lester" => 'nyarly@gmail.com'
   }
   spec.authors		= author_list.keys
   spec.email		= spec.authors.map {|name| author_list[name]}
-  spec.summary		= ""
+  spec.summary		= "Run commands across filtered lists of servers"
   spec.description	= <<-EndDescription
+  Here's the idea, and it's very simple: you maintain a little database of the
+  servers you work with. You have some commands you run parameterized in
+  relationship to those servers. Those commands are all available as
+  subcommands of helm.
   EndDescription
 
   spec.rubyforge_project= spec.name.downcase
-  spec.homepage        = "http://nyarly.github.com/#{spec.name.downcase}"
+  spec.homepage        = "https://git.lrdesign.com/lrd/helm/blob/master/README.md"
   spec.required_rubygems_version = Gem::Requirement.new(">= 0") if spec.respond_to? :required_rubygems_version=
 
   # Do this: y$@"
