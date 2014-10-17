@@ -1,6 +1,0 @@
-#!/usr/bin/env ruby
-
-require 'wheelhouse/cli'
-
-Wheelhouse.load_commands
-Wheelhouse::CLI::Main.start(ARGV)

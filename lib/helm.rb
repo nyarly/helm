@@ -1,11 +1,11 @@
 require 'valise'
 require 'sequel'
 require 'logger'
-require 'wheelhouse/application'
-require 'wheelhouse/cli'
-require 'wheelhouse/server-command'
+require 'helm/application'
+require 'helm/cli'
+require 'helm/server-command'
 
-module Wheelhouse
+module Helm
   class << self
     def logger
       @logger ||= Logger.new($stderr).tap do |logger|

@@ -1,4 +1,4 @@
-module Wheelhouse
+module Helm
   class Record
     class << self
       attr_accessor :columns

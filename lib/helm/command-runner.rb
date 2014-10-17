@@ -1,6 +1,6 @@
 require 'caliph'
 
-module Wheelhouse
+module Helm
   class CommandRunner
     CommandExecution = Struct.new(:server, :result)
 

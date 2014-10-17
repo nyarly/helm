@@ -1,11 +1,11 @@
-require 'wheelhouse'
+require 'helm'
 
-module Wheelhouse
+module Helm
   class Query
     include Enumerable
 
     def initialize(conn_string)
-      @db = Wheelhouse.databases[conn_string]
+      @db = Helm.databases[conn_string]
     end
 
     attr_reader :db

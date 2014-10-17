@@ -1,5 +1,5 @@
 Gem::Specification.new do |spec|
-  spec.name		= "wheelhouse"
+  spec.name		= "helm"
   spec.version		= "0.0.1"
   author_list = {
     "Judson Lester" => 'nyarly@gmail.com'
@@ -17,22 +17,22 @@ Gem::Specification.new do |spec|
   # Do this: y$@"
   # !!find lib bin doc spec spec_help -not -regex '.*\.sw.' -type f 2>/dev/null
   spec.files		= %w[
-    lib/wheelhouse/records/server.rb
-    lib/wheelhouse/persister.rb
-    lib/wheelhouse/queries/server.rb
-    lib/wheelhouse/record.rb
-    lib/wheelhouse/cli.rb
-    lib/wheelhouse/persisters/server.rb
-    lib/wheelhouse/command-runner.rb
-    lib/wheelhouse/server-command.rb
-    lib/wheelhouse/query.rb
-    lib/wheelhouse/application.rb
-    lib/wheelhouse.rb
-    bin/wheelhouse
+    lib/helm/records/server.rb
+    lib/helm/persister.rb
+    lib/helm/queries/server.rb
+    lib/helm/record.rb
+    lib/helm/cli.rb
+    lib/helm/persisters/server.rb
+    lib/helm/command-runner.rb
+    lib/helm/server-command.rb
+    lib/helm/query.rb
+    lib/helm/application.rb
+    lib/helm.rb
+    bin/helm
     spec_help/gem_test_suite.rb
   ]
 
-  spec.executables << 'wheelhouse'
+  spec.executables << 'helm'
 
   spec.test_file        = "spec_help/gem_test_suite.rb"
   spec.licenses = ["MIT"]

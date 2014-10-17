@@ -1,7 +1,7 @@
-require 'wheelhouse/persister'
-require 'wheelhouse/records/server'
+require 'helm/persister'
+require 'helm/records/server'
 
-module Wheelhouse
+module Helm
   module Persisters
     class Server < Persister
       def columns

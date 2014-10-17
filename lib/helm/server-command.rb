@@ -1,6 +1,6 @@
 require 'caliph/command-line-dsl'
 
-module Wheelhouse
+module Helm
   class ServerCommand
 
     class << self

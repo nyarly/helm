@@ -1,4 +1,4 @@
-module Wheelhouse
+module Helm
   class Uptime < ServerCommand
     def name
       "uptime"

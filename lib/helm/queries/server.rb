@@ -1,7 +1,7 @@
-require 'wheelhouse/query'
-require 'wheelhouse/records/server'
+require 'helm/query'
+require 'helm/records/server'
 
-module Wheelhouse
+module Helm
   module Queries
     class Server < Query
       attr_accessor :server_id, :client, :name, :role, :platform, :id_from_platform

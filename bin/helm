@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'helm/cli'
+
+Helm.load_commands
+Helm::CLI::Main.start(ARGV)

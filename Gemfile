@@ -6,4 +6,4 @@ group :development do
   gem 'corundum'
 end
 
-gemspec :name => 'wheelhouse'
+gemspec :name => 'helm'

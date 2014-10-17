@@ -1,9 +1,9 @@
-require 'wheelhouse'
+require 'helm'
 
-module Wheelhouse
+module Helm
   class Persister
     def initialize(db_string)
-      @db = Wheelhouse.databases[db_string]
+      @db = Helm.databases[db_string]
     end
     attr_accessor :db
 

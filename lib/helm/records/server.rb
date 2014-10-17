@@ -1,6 +1,6 @@
-require 'wheelhouse/record'
+require 'helm/record'
 
-module Wheelhouse
+module Helm
   module Records
     Server = Record.subclass(
       :server_id,

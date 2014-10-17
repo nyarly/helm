@@ -1,7 +1,7 @@
-require 'wheelhouse'
+require 'helm'
 require 'thor'
 
-module Wheelhouse
+module Helm
   Config = Struct.new(:connstring, :editor, :tempdir)
 
   def self.config
@@ -14,7 +14,7 @@ module Wheelhouse
 
       desc "update", "Update the servers database schema"
       def update
-        Migrate.new(Wheelhouse.config, options).execute
+        Migrate.new(Helm.config, options).execute
       end
     end
 
@@ -24,18 +24,18 @@ module Wheelhouse
       desc "add", "Add a list of servers described in YAML from STDIN"
       option :client, :banner => "Client name"
       def add
-        Add.new(Wheelhouse.config, options, $stdin).execute
+        Add.new(Helm.config, options, $stdin).execute
       end
 
-      desc "list", "List servers that Wheelhouse knows about"
+      desc "list", "List servers that Helm knows about"
       def list
-        puts List.new(Wheelhouse.config, options).execute
+        puts List.new(Helm.config, options).execute
       end
 
       desc "edit", "Edit the details of particular servers"
       method_option :id
       def edit
-        Edit.new(Wheelhouse.config, options).execute
+        Edit.new(Helm.config, options).execute
       end
     end
 
@@ -58,7 +58,7 @@ module Wheelhouse
           end
 
           define_method command_config.name do |*args|
-            command = Commands::Main::Defined.new(Wheelhouse.config, options, command_config)
+            command = Commands::Main::Defined.new(Helm.config, options, command_config)
             command.execute(*args)
           end
         end
@@ -68,7 +68,7 @@ module Wheelhouse
         super
 
         shell.say "Commands are loaded from:"
-        shell.say Wheelhouse.commands_valise.to_s
+        shell.say Helm.commands_valise.to_s
       end
     end
   end
