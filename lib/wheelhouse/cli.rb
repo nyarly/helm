@@ -2,13 +2,19 @@ require 'wheelhouse'
 require 'thor'
 
 module Wheelhouse
+  Config = Struct.new(:connstring, :editor, :tempdir)
+
+  def self.config
+    Config.new("sqlite://servers.sql", "vim", ".")
+  end
+
   module CLI
     class DB < Thor
       include Commands::Database
 
       desc "update", "Update the servers database schema"
       def update
-        Migrate.new(options).execute
+        Migrate.new(Wheelhouse.config, options).execute
       end
     end
 
@@ -18,18 +24,18 @@ module Wheelhouse
       desc "add", "Add a list of servers described in YAML from STDIN"
       option :client, :banner => "Client name"
       def add
-        Add.new($stdin,options).execute
+        Add.new(Wheelhouse.config, options, $stdin).execute
       end
 
       desc "list", "List servers that Wheelhouse knows about"
       def list
-        puts List.new(options).execute
+        puts List.new(Wheelhouse.config, options).execute
       end
 
       desc "edit", "Edit the details of particular servers"
       method_option :id
       def edit
-        Edit.new(options).execute
+        Edit.new(Wheelhouse.config, options).execute
       end
     end
 
@@ -45,14 +51,14 @@ module Wheelhouse
       class_option :role
 
       class << self
-        def define_from(config)
-          desc config.name.to_s, config.description
-          config.scope_options.each do |name|
+        def define_from(command_config)
+          desc command_config.name.to_s, command_config.description
+          command_config.scope_options.each do |name|
             option name, :required => true
           end
 
-          define_method config.name do |*args|
-            command = Commands::Main::Defined.new(config, options)
+          define_method command_config.name do |*args|
+            command = Commands::Main::Defined.new(Wheelhouse.config, options, command_config)
             command.execute(*args)
           end
         end

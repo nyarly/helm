@@ -90,7 +90,7 @@ module Wheelhouse
         #command.options << "-l " + server.connect_as unless
         #server.connect_as.nil?
         # XXX need to add 'connect_as'
-        #command.options << "-p " + server.port unless server.ssh_port.nil?
+        #command.options << "-p " + server.port unless server.ssh_port.nil?  ##ok
         # XXX need to add "ssh_port"
         command.options << server.public_dns_name || server.public_ip_address
       end - escaped_command(*command, &block)

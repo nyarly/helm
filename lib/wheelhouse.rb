@@ -14,7 +14,7 @@ module Wheelhouse
     end
 
     def databases
-      @databases = Hash.new do |hash, conn_string|
+      @databases ||= Hash.new do |hash, conn_string|
         hash[conn_string] = Sequel::connect(conn_string, :logger => logger).tap do |db|
           db.extension(:pretty_table)
         end

@@ -18,11 +18,8 @@ Gem::Specification.new do |spec|
   # !!find lib bin doc spec spec_help -not -regex '.*\.sw.' -type f 2>/dev/null
   spec.files		= %w[
     lib/wheelhouse/records/server.rb
-    lib/wheelhouse/single-command.rb
     lib/wheelhouse/persister.rb
     lib/wheelhouse/queries/server.rb
-    lib/wheelhouse/command-config.rb
-    lib/wheelhouse/command-definition.rb
     lib/wheelhouse/record.rb
     lib/wheelhouse/cli.rb
     lib/wheelhouse/persisters/server.rb

@@ -5,6 +5,7 @@ module Wheelhouse
     def initialize(db_string)
       @db = Wheelhouse.databases[db_string]
     end
+    attr_accessor :db
 
     def slice(hash)
       Hash[
