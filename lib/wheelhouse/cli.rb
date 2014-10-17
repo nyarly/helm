@@ -45,21 +45,15 @@ module Wheelhouse
       class_option :role
 
       class << self
-        def required_options(*options)
-          options.each do |name|
-            option name, :required => true
-          end
-        end
-        alias required_option required_options
-
         def define_from(config)
           desc config.name.to_s, config.description
-          config.scope_options.each do |option|
-            required_option option
+          config.scope_options.each do |name|
+            option name, :required => true
           end
 
-          define_method config.name do
-            Commands::Main::Defined.new(config, options).execute
+          define_method config.name do |*args|
+            command = Commands::Main::Defined.new(config, options)
+            command.execute(*args)
           end
         end
       end

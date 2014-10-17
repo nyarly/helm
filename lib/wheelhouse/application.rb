@@ -43,9 +43,10 @@ module Wheelhouse
 
     module Database
       class Migrate < Command
-        def initialize
+        def initialize(options)
           @db_string  = CONNSTRING
           @directory = "migrations"
+          super(options)
         end
         attr_accessor :db_string, :directory
 
@@ -61,8 +62,9 @@ module Wheelhouse
 
     module Servers
       class Add < Command
-        def initialize(source_io)
+        def initialize(source_io,options)
           @source_io = source_io
+          super(options)
         end
 
         def execute
